@@ -1,8 +1,8 @@
 package com.edureka.demo.kafka.entity;
 
-import com.edureka.demo.kafka.json.CustomLocalDateSerializer;
+import com.edureka.demo.kafka.json.CustomLocalDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class Employee {
     private String name;
 
     @JsonProperty("birth_date")
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
     private LocalDate birthdate;
 
 }

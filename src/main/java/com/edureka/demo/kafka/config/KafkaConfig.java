@@ -1,13 +1,12 @@
 package com.edureka.demo.kafka.config;
 
-import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.core.ConsumerFactory;
+import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
 @Configuration
 public class KafkaConfig {
@@ -16,14 +15,10 @@ public class KafkaConfig {
     private KafkaProperties kafkaProperties;
 
     @Bean
-    public ProducerFactory<String, String> producerFactory(){
-        var properties = kafkaProperties.buildProducerProperties();
-        properties.put(ProducerConfig.METADATA_MAX_AGE_CONFIG, "18000");
-        return new DefaultKafkaProducerFactory<>(properties);
-    }
+    public ConsumerFactory<Object, Object> consumerFactory(){
+        var properties = kafkaProperties.buildConsumerProperties();
 
-    @Bean
-    public KafkaTemplate<String,String> kafkaTemplate(){
-        return new KafkaTemplate<>(producerFactory());
+        properties.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG,"120000");
+        return new DefaultKafkaConsumerFactory<>(properties);
     }
 }
