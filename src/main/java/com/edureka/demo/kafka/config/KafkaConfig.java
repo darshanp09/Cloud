@@ -21,4 +21,26 @@ public class KafkaConfig {
         properties.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG,"120000");
         return new DefaultKafkaConsumerFactory<>(properties);
     }
+    
+    @SneakyThrows
+    @Bean(name = "farLocationContainerFactory")
+    public ConcurrentKafkaListenerContainerFactory<Object, Object> farLocationFactory
+            ( ConcurrentKafkaListenerContainerFactoryConfigurer configure){
+
+        var factory = new ConcurrentKafkaListenerContainerFactory<Object,Object>();
+        configure.configure(factory, consumerFactory());
+
+        // TODO: define filter now
+        factory.setRecordFilterStrategy(new RecordFilterStrategy<Object, Object>() {
+
+            @SneakyThrows
+            @Override
+            public boolean filter(ConsumerRecord<Object, Object> consumerRecord) {
+                var carLocation = objectMapper.readValue(consumerRecord.value().toString(), CarLocation.class);
+                return carLocation.getDistance() <= 100;
+            }
+        });
+
+        return factory;
+    }
 }
