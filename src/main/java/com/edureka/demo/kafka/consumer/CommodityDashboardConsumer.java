@@ -22,4 +22,11 @@ public class CommodityDashboardConsumer {
 //        Thread.sleep(ThreadLocalRandom.current().nextLong(500,1000));
         log.info("Dashboard logic for {}", commodity);
     }
+    
+    @SneakyThrows
+    @KafkaListener(topics = "t_location",groupId = "cg-far-location", containerFactory = "farLocationContainerFactory")
+    public void listenFarThen_100(String message){
+        var calLocation = objectMapper.readValue(message, CarLocation.class);
+        log.info("ListenFar : {}",calLocation);
+    }
 }
